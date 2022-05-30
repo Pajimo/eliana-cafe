@@ -10,6 +10,7 @@ import { checkAuthType } from "../slice/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from "react-icons/fc";
+import {useNavigate} from 'react-router-dom'
 
 interface LoginProps {
     
@@ -19,6 +20,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 
     const auth = getAuth();
     const dispatch = useDispatch()
+	const navigate = useNavigate()
 
     const [userProfile, setUserProfile] = useState({
         password: '',
@@ -72,8 +74,8 @@ const Login: React.FunctionComponent<LoginProps> = () => {
             	</div>
 				<div className='md:basis-7/12 grid place-items-center '>
 					<div className=''>
-						<div className="flex justify-center">
-							<div className="logo"></div>
+						<div className="flex justify-center" onClick={() => navigate('/')}>
+							<div className="logo">Home</div>
 						</div>
 						<h1 className="text-2xl font-bold ">Sign in to Eliana Cafe</h1>
 						<button className='mt-5 w-full text-white rounded-lg mb-5 bg-blue-500 hover:bg-blue-400 py-2 font-semibold flex 

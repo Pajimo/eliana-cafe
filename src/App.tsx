@@ -15,7 +15,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
   return(
     <>
         <Routes>
-          <Route path='/' element={<Authentication/>}/>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/authentication' element={<Authentication/>}/>
           <Route path='/your-bag' element={<Cart />} />
           <Route path='homepage/all-products' element={<AllProducts/>}/>
         </Routes>

@@ -13,6 +13,7 @@ import {ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { database } from "../../configuration/firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
+import {useNavigate} from 'react-router-dom'
 
 
 interface SignUpProps {
@@ -27,6 +28,7 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 
     const auth = getAuth();
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
     const [userProfile, setUserProfile] = useState({
         fullName: '',
@@ -95,8 +97,8 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
             	</div>
 				<div className='md:basis-7/12 grid place-items-center '>
 					<div className=''>
-						<div className="flex justify-center">
-							<div className="logo"></div>
+						<div className="flex justify-center" onClick={() => navigate('/')}>
+							<div className="logo">Home</div>
 						</div>
 						<h1 className="text-3xl font-bold ">Sign up to Eliana Cafe</h1>
 						<button className='mt-5 w-full text-white rounded-lg mb-5 bg-blue-500 hover:bg-blue-400 py-2 font-semibold 
@@ -133,6 +135,10 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 							</div>
 							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white font-semibold mt-5' onClick={signUp}>Create Account</button>
 						</form>
+            			<div className='mt-3'>
+							<h1 className="">Already a Member? <span onClick={() => dispatch(checkAuthType('login'))}
+								className='text-blue-500 cursor-pointer'>Log in</span> </h1>
+						</div>
 					</div>
 				</div>
           	</div>

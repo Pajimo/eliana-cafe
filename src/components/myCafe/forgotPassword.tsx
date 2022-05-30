@@ -44,8 +44,8 @@ const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = () => {
             	</div>
 				<div className='md:basis-7/12 grid place-items-center '>
 					<div className=''>
-						<div className="flex justify-center">
-							<div className="logo"></div>
+						<div className="mb-5" onClick={() => dispatch(checkAuthType('login'))}>
+							<div className="logo p-3 bg-gray-200 shadow-xl">Back</div>
 						</div>
 						<h1 className="text-2xl font-bold ">Forgot Password?</h1>
                         <p className='mt-5  w-96'>Enter the email address you used when you joined and we’ll send you 
