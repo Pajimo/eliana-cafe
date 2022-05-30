@@ -5,16 +5,17 @@ import { useSelector } from "react-redux";
 interface ProductProps {
     props: number
 }
+
+interface Products{
+    cart: {
+        total_orders: number,
+        total_price: number,
+        orders: (string | number)[]
+    }
+}
  
 const Product: React.FunctionComponent<ProductProps> = ({props}) => {
 
-    interface Products{
-        cart: {
-            total_orders: number,
-            total_price: number,
-            orders: (string | number)[]
-        }
-    }
 
     let cartProducts = useSelector((state: Products) => state.cart)
 

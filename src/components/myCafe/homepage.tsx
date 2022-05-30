@@ -10,10 +10,10 @@ const HomePage: React.FunctionComponent<HomePageProps> = () => {
         <div>
             <Link to='homepage/all-products'>
                 <button>Order now</button>
-            </Link>
+            </Link><br></br>
             <button onClick={() => navigate('/authentication')}>Log In / Sign Up</button>
         </div>
-     );
+    );
 }
  
 export default HomePage;

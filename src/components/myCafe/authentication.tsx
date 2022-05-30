@@ -18,12 +18,11 @@ interface AuthenticationProps {
     
 }
 
+interface AuthType{
+    auth: string
+}
  
 const Authentication: React.FunctionComponent<AuthenticationProps> = () => {
-
-    interface AuthType{
-        auth: string
-    }
 
     const authType = useSelector((state: AuthType) => state.auth)
 
