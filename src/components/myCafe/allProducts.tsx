@@ -33,6 +33,8 @@ interface SingleProduct{
  
 const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
+	const auth = getAuth()
+
   	let cartProducts = useSelector((state: Products) => state.cart)
 
 	const [singleProduct, setSingleProduct] = useState<SingleProduct>({
@@ -41,10 +43,13 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 	})
 
 	const add_product_to_db = async() => {
-
-		await setDoc(doc(database, "cities", "CartProducts"), {
-		cartProducts: cartProducts.orders
-		})
+		if(auth.currentUser){
+			await setDoc(doc(database, "cities", "CartProducts"), {
+				cartProducts: cartProducts.orders
+			})
+		}else{
+			localStorage.setItem('CartProducts', JSON.stringify(cartProducts.orders))
+		}
 	}
 
 	useEffect(() => {

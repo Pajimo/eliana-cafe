@@ -18,7 +18,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
           <Route path='/' element={<HomePage/>}/>
           <Route path='/authentication' element={<Authentication/>}/>
           <Route path='/your-bag' element={<Cart />} />
-          <Route path='homepage/all-products' element={<AllProducts/>}/>
+          <Route path='/homepage/all-products' element={<AllProducts/>}/>
         </Routes>
         {/* {quantity.map((order: any) => {
           return(

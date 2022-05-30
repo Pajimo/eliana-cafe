@@ -36,9 +36,14 @@ const cartSlice = createSlice({
         REMOVE_FROM_CART(state, action){
             return state.orders.filter(order => order.id !== action.payload)
         },
+        UPDATE_CART(state, action){
+            for (var i = 0; i < action.payload.length; i++){
+                state.orders.push(action.payload[i])
+            }
+        }
     }
 })
 
-export const {ADD_TO_CART, REMOVE_FROM_CART} = cartSlice.actions
+export const {ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART} = cartSlice.actions
 
 export default cartSlice

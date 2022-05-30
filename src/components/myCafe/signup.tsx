@@ -39,45 +39,47 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 
 
     const signUp = async() =>{
-        if(!userProfile.fullName){
-          toast.error('Enter your first name')
+		if(userProfile.password.length < 6){
+			toast.error('Password too short')
+		}else if(!userProfile.fullName){
+          	toast.error('Enter your first name')
         }else if(!userProfile.password){
-          toast.error("Enter your password")
+          	toast.error("Enter your password")
         }else if(!checkbox){
 			toast.error("Check the box")
 		}else if(!userProfile.email){
-          toast.error('Enter your email address')
+          	toast.error('Enter your email address')
         }else{
-          try{
-            const res = await createUserWithEmailAndPassword(auth, userProfile.email, userProfile.password)
-            // Signed in 
-            const user = res.user;
-            await updateProfile(user, {
-              displayName: userProfile.fullName
-            })
+			try{
+				const res = await createUserWithEmailAndPassword(auth, userProfile.email, userProfile.password)
+				// Signed in 
+				const user = res.user;
+				await updateProfile(user, {
+					displayName: userProfile.fullName
+				})
 
-            const q = query(collection(database, "users"), where("uid", "==", user.uid));
-            const docs = await getDocs(q);
-            if (docs.docs.length === 0) {
-              await addDoc(collection(database, "users"), {
-                uid: user.uid,
-                name: userProfile.fullName,
-                authProvider: "Email/Password",
-                email: user.email,
-              });
-            }
-            sendEmailVerification(user)
-            // ...
-          }
-          catch(error: any){
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorMessage)
-            if (error.code === 'auth/email-already-in-use') {
-              toast.error('Email Already in Use');
-            }
-            // ..
-          };
+				const q = query(collection(database, "users"), where("uid", "==", user.uid));
+				const docs = await getDocs(q);
+				if (docs.docs.length === 0) {
+					await addDoc(collection(database, "users"), {
+						uid: user.uid,
+						name: userProfile.fullName,
+						authProvider: "Email/Password",
+						email: user.email,
+					});
+				}
+				sendEmailVerification(user)
+				// ...
+			}
+			catch(error: any){
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(errorMessage)
+				if (error.code === 'auth/email-already-in-use') {
+				toast.error('Email Already in Use');
+				}
+				// ..
+			};
         }
     }
 
@@ -114,7 +116,7 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 						</div>
 						<form className="mt-5">
 							<label htmlFor='Fullname' className='font-bold'>Full Name</label><br></br>
-							<input type="text" name='fullname' 
+							<input type="text" name='fullName' 
 								className='bg-gray-200 focus:bg-white w-96 py-2 px-4 mt-2 mb-7 rounded-lg focus:border-2 
 									focus:border-red-200 focus:outline focus:outline-2 focus:outline-offset-2 outline-red-200' 
 								value={userProfile.fullName} onChange={handleInputChange} /><br></br>
