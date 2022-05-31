@@ -35,7 +35,8 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 		});
 	  };
 
-    const signIn = async () =>{
+    const signIn = async (e: any) =>{
+		e.preventDefault()
         if(!userProfile.email){
           toast.error("Enter your Email address")
         }else if(!userProfile.password){
@@ -103,7 +104,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 								className='bg-gray-200 focus:bg-white w-96 py-2 px-4 mt-2 mb-7 rounded-lg 
 									focus:border-2 focus:border-red-200 focus:outline focus:outline-2 focus:outline-offset-2 outline-red-200' 
 								value={userProfile.password} onChange={handleInputChange} /><br></br>
-							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white' onClick={signIn}>Sign In</button>
+							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white' onClick={(e) => signIn(e)}>Sign In</button>
 						</form>
 						<div className='mt-3'>
 							<h1 className="">Not a Member? <span onClick={() => dispatch(checkAuthType('signup'))}

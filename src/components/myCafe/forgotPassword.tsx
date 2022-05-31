@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
 interface ForgotPasswordProps {

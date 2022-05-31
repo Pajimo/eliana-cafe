@@ -3,14 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ADD_TO_CART,  } from "../slice/cartSlice";
 import { doc, setDoc } from "firebase/firestore"; 
 import { database } from "../../configuration/firebaseConfig";
-import { getAuth,
-    GoogleAuthProvider, 
-    signInWithPopup,
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    sendEmailVerification,
-    updateProfile,
-    sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Product from "./product";
 import Authentication from "./authentication";
 
@@ -42,14 +35,25 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		productId: 0
 	})
 
-	const add_product_to_db = async() => {
-		if(auth.currentUser){
-			await setDoc(doc(database, "cities", "CartProducts"), {
-				cartProducts: cartProducts.orders
-			})
-		}else{
-			localStorage.setItem('CartProducts', JSON.stringify(cartProducts.orders))
-		}
+	const add_product_to_db = async() => {    
+		onAuthStateChanged(auth, async(user) => {
+			console.log(user)
+			if (user) {
+				console.log('okay')
+				// User is signed in, see docs for a list of available properties
+				// https://firebase.google.com/docs/reference/js/firebase.User
+				
+				const uid = user.uid ;
+				await setDoc(doc(database, uid, "CartProducts"), {
+					cartProducts: cartProducts.orders
+				})
+			} else{
+			// ...
+			// User is signed out
+			// ...
+				localStorage.setItem('CartProducts', JSON.stringify(cartProducts.orders))
+			}
+		});
 	}
 
 	useEffect(() => {

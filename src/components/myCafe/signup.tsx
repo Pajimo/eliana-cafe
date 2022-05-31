@@ -7,7 +7,7 @@ import { getAuth,
     sendPasswordResetEmail } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { setDoc, doc, collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState } from "react";
 import {ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +38,8 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 	const [checkbox, setCheckBox] = useState(false)
 
 
-    const signUp = async() =>{
+    const signUp = async(e:any) =>{
+		e.preventDefault()
 		if(userProfile.password.length < 6){
 			toast.error('Password too short')
 		}else if(!userProfile.fullName){
@@ -58,15 +59,15 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 					displayName: userProfile.fullName
 				})
 
-				const q = query(collection(database, "users"), where("uid", "==", user.uid));
+				const q = collection(database, user.uid);
 				const docs = await getDocs(q);
 				if (docs.docs.length === 0) {
-					await addDoc(collection(database, "users"), {
+					await setDoc(doc(database, user.uid, "User-Info"), {
 						uid: user.uid,
 						name: userProfile.fullName,
 						authProvider: "Email/Password",
 						email: user.email,
-					});
+					})
 				}
 				sendEmailVerification(user)
 				// ...
@@ -135,7 +136,7 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 								<p className="">Creating an account means you’re okay with our Terms of Service, 
 									Privacy Policy, and our default Notification Settings.</p>
 							</div>
-							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white font-semibold mt-5' onClick={signUp}>Create Account</button>
+							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white font-semibold mt-5' onClick={(e)=> signUp(e)}>Create Account</button>
 						</form>
             			<div className='mt-3'>
 							<h1 className="">Already a Member? <span onClick={() => dispatch(checkAuthType('login'))}

@@ -24,8 +24,12 @@ interface AuthType{
  
 const Authentication: React.FunctionComponent<AuthenticationProps> = () => {
 
+    const auth = getAuth()
+
     const authType = useSelector((state: AuthType) => state.auth)
 
+
+    console.log(auth)
 
     if(authType === 'login'){
         return(
