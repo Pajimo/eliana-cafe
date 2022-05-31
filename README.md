@@ -1,7 +1,12 @@
 # Personal Project, a Cafe website built majorly with Typescript, Redux and firebase
 
 
-In the project directory, after cloning, you can run:
+In the project directory, after cloning, 
+
+You need to create an account on firebase to be able to use the firestore api added in this project.
+You will be given api key and other keys that you will add to your firebaseconfig.js file using .env
+
+after that, you can run:
 
 ### `npm start`
 
