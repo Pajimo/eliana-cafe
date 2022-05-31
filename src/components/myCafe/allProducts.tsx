@@ -21,7 +21,7 @@ interface Products{
 
 interface SingleProduct{
     state: boolean,
-    productId: number
+    productId: {}
 }
  
 const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
@@ -32,7 +32,7 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	const [singleProduct, setSingleProduct] = useState<SingleProduct>({
 		state:false,
-		productId: 0
+		productId: {}
 	})
 
 	const add_product_to_db = async() => {    
@@ -89,28 +89,33 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		}
 	}
 
-	const showProduct = (product: number) => {
+	const showProduct = (product:any) => {
 		setSingleProduct({
 			state: true,
 			productId: product
 		})
 	}
-        
 
     return (
-        <div>
-			{singleProduct ? <Product props={singleProduct.productId}/> : ''}
+        <div className="relative">
+			{singleProduct.state && 
+			<div className="absolute inset-0">
+				<Product props={singleProduct.productId} setProduct={setSingleProduct}/>
+			</div>}
 			{cartProducts.orders.length} <span>Orders</span>
             {allProducts.map((order: any) => {
 				return(
-					<div key={order.id} onClick={() => showProduct(order.id)}>
-					<h1>{order.name}</h1>
-					<div>
-						<button onClick={() => decreaseQuantity(order.id)}>-</button>
-						<h1>{order.eachQuantity}</h1>
-						<button onClick={() =>increaseQuantity(order.id)}>+</button></div>
-					<h1>{order.price}</h1>
-					<button onClick={() => addToCart(order)}>Add to bag</button>
+					<div key={order.id}>
+						<h1>{order.name}</h1>
+						<div className="flex">
+							<button onClick={() => decreaseQuantity(order.id)}>-</button>
+							<h1>{order.eachQuantity}</h1>
+							<button onClick={() =>increaseQuantity(order.id)}>+</button>
+						</div>
+						
+							<h1>${order.price}</h1>
+							<button onClick={() => showProduct(order)}>View</button>
+							<button onClick={() => addToCart(order)}>Add to bag</button>
 					</div>
 				)
             })}

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 
 
 interface ProductProps {
-    props: number
+    props: {}
+    setProduct: Dispatch<SetStateAction<SingleProduct>>
 }
 
 interface Products{
@@ -13,8 +14,13 @@ interface Products{
         orders: (string | number)[]
     }
 }
+
+interface SingleProduct{
+    state: boolean,
+    productId: {}
+}
  
-const Product: React.FunctionComponent<ProductProps> = ({props}) => {
+const Product: React.FunctionComponent<ProductProps> = ({props, setProduct}) => {
 
 
     let cartProducts = useSelector((state: Products) => state.cart)
@@ -23,20 +29,24 @@ const Product: React.FunctionComponent<ProductProps> = ({props}) => {
     //     id:number
     // }
 
-    const [singleProduct, setSingleProduct] = useState<(string | number)[]>([])
+    const [singleProduct, setSingleProduct] = useState<object[]>([])
 
     useEffect(() => {
-        console.log('yes boss')
-        setSingleProduct(cartProducts.orders.filter((product:any) => product.id === props))
+        setSingleProduct([props])
     }, [props])
 
     return ( 
-        <div className="border-2 border-green-500">
-            {singleProduct.map((one:any) => {
-                return(
-                    <div key={one.id}>{one.name}</div>
-                )
-            })}
+        <div className="modal text-white">
+            <div className="modal-content">
+                <div className="modal-body text-stone-700 bg-white">
+                    <div onClick={() => setProduct({state: false, productId: {}})}>close</div>
+                    {singleProduct.map((one:any) => {
+                        return(
+                            <div key={one.id}>{one.name}</div>
+                        )
+                    })}
+                </div>
+            </div>
         </div>
      );
 }
