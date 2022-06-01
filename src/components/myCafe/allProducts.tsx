@@ -5,7 +5,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { database } from "../../configuration/firebaseConfig";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Product from "./product";
-import Authentication from "./authentication";
+import { AiOutlineShopping } from "react-icons/ai";
 
 export interface AllProductsProps {
     
@@ -26,6 +26,8 @@ interface SingleProduct{
  
 const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
+	//process.env.REACT_APP_NUTRITION_APIKEY
+
 	const auth = getAuth()
 
   	let cartProducts = useSelector((state: Products) => state.cart)
@@ -37,9 +39,7 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	const add_product_to_db = async() => {    
 		onAuthStateChanged(auth, async(user) => {
-			console.log(user)
 			if (user) {
-				console.log('okay')
 				// User is signed in, see docs for a list of available properties
 				// https://firebase.google.com/docs/reference/js/firebase.User
 				
@@ -96,29 +96,48 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		})
 	}
 
+	const fetchBetter = async() => {
+		const req = await fetch('https://trackapi.nutritionix.com/v2/search/instant', {
+			method: 'GET',
+			headers: {
+				"x-app-id":"a634b53f",
+				"x-app-key":"420e3bb072d1b99cc70331b9e980360d",  
+				'Content-Type': 'application/json'
+			}
+		})
+		const data = await req.json()
+		console.log(data)
+	}
+
+	useEffect(() => {
+		fetchBetter()
+	}, [])
+
     return (
         <div className="relative">
 			{singleProduct.state && 
 			<div className="absolute inset-0">
 				<Product props={singleProduct.productId} setProduct={setSingleProduct}/>
 			</div>}
-			{cartProducts.orders.length} <span>Orders</span>
-            {allProducts.map((order: any) => {
-				return(
-					<div key={order.id}>
-						<h1>{order.name}</h1>
-						<div className="flex">
-							<button onClick={() => decreaseQuantity(order.id)}>-</button>
-							<h1>{order.eachQuantity}</h1>
-							<button onClick={() =>increaseQuantity(order.id)}>+</button>
+			{cartProducts.orders.length} <span><AiOutlineShopping /></span>
+			<div className="grid md:grid-flow-col md:auto-cols-max place-content-center">
+				{allProducts.map((order: any) => {
+					return(
+						<div key={order.id} className='w-80 h-52 m-5 border-2 '>
+							<img src='' className="h-30 w-30" alt={order.name}/>
+							<h1>{order.name}</h1>
+							<div className="flex">
+								<button onClick={() => decreaseQuantity(order.id)}>-</button>
+								<h1>{order.eachQuantity}</h1>
+								<button onClick={() =>increaseQuantity(order.id)}>+</button>
+							</div>
+								<h1>${order.price}</h1>
+								<button onClick={() => showProduct(order)}>View</button>
+								<button onClick={() => addToCart(order)}>Add to bag</button>
 						</div>
-						
-							<h1>${order.price}</h1>
-							<button onClick={() => showProduct(order)}>View</button>
-							<button onClick={() => addToCart(order)}>Add to bag</button>
-					</div>
-				)
-            })}
+					)
+				})}
+			</div>
         </div>
      );
 }
