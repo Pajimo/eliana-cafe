@@ -41,12 +41,13 @@ const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = () => {
         <React.Fragment>
             <ToastContainer />
             <div className='md:flex md:flex-row'>
-            	<div className="md:h-screen h-48 md:basis-5/12 bg-cover bg-center bg-no-repeat bg-orange-400">
+            	<div className="md:h-screen h-48 md:basis-5/12">
+                    <img className='object-cover w-screen h-full' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXGFJCx8_1EOl-8pzL5YTbxBA4CrbKRFtj7A&usqp=CAU' />
             	</div>
 				<div className='md:basis-7/12 grid place-items-center '>
 					<div className=''>
 						<div className="mb-5" onClick={() => dispatch(checkAuthType('login'))}>
-							<div className="logo p-3 bg-gray-200 shadow-xl">Back</div>
+							<div className="cursor-pointer logo p-3 bg-gray-200 shadow-xl w-16 font-bold mt-5 mb-10">Back</div>
 						</div>
 						<h1 className="text-2xl font-bold ">Forgot Password?</h1>
                         <p className='mt-5  w-96'>Enter the email address you used when you joined and we’ll send you 

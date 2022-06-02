@@ -15,7 +15,7 @@ const cartSlice = createSlice({
         ADD_TO_CART: (state, action) =>{
             const newOrder = action.payload
             console.log(newOrder)
-            const existingOrder = state.orders.find(order => order.id === newOrder.id)
+            const existingOrder = state.orders.find(order => order.tag_id === newOrder.tag_id)
 
             if(existingOrder){
                 existingOrder.eachQuantity++

@@ -14,7 +14,8 @@ interface HomePageProps {
  
 const HomePage: React.FunctionComponent<HomePageProps> = () => {
 
-    const auth = getAuth()
+    const auth = getAuth();
+    const navigate = useNavigate()
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -38,22 +39,20 @@ const HomePage: React.FunctionComponent<HomePageProps> = () => {
         fetchInitialAuth()
     }, [])
 
-    const navigate = useNavigate()
-
     return ( 
         <React.Fragment>
             <div className='relative'>
                 <div className='absolute inset-x-0 top-0'>
-                    <Header />
+                    <Header color={'randomNonsense'}/>
                 </div>
-                <div className='flex h-96 mb-10'>
-                    <div className='basis-1/2'>
-                        <div className='h-full bg-cover bg-no-repeat bg-center' style={{backgroundImage: `url(${icedcoffee})`}}>
+                <div className='md:flex md:h-96 mb-10'>
+                    <div className='md:basis-1/2'>
+                        <div className='h-96 md:h-full bg-cover bg-no-repeat md:bg-center' style={{backgroundImage: `url(${icedcoffee})`}}>
                         </div>
                     </div>
-                    <div className='basis-1/2 bg-red-400 grid place-items-center'>
-                        <div className='text-white text-center w-2/3'>
-                            <p className='font-bold text-6xl'>Silky New Cold brew</p>
+                    <div className='md:basis-1/2 bg-red-400 grid place-items-center h-96'>
+                        <div className='text-white text-center md:w-2/3 px-5 md:px-0'>
+                            <p className='font-bold md:text-6xl text-4xl'>Silky New Cold brew</p>
                             <p className='font-semibold text-2xl mt-4'>Dreamy, smooth, cold choclate cream brew</p>
                             <button onClick={() => navigate('/homepage/all-products')} 
                                 className='border-2 border-white w-32 mt-5 py-2 rounded-3xl font-semibold'>Order now</button>
@@ -61,19 +60,19 @@ const HomePage: React.FunctionComponent<HomePageProps> = () => {
                     </div>
                 </div>
                 <div className=' '>
-                    <div className='flex h-96 mb-10'>
-                        <div className='basis-1/2 bg-pink-300 grid place-items-center'>
-                            <div className='text-stone-700 text-center w-2/3'>
-                                <p className='font-bold text-6xl'>Special Eliana waffles</p>
-                                <p className='font-semibold text-xl mt-4'> 
+                    <div className='md:flex md:h-96 mb-10'>
+                        <div className='basis-1/2 h-96 order-last'>
+                            <div className='h-full bg-cover bg-no-repeat bg-center' style={{backgroundImage: `url(${cafeBreakfast})`}}>
+                            </div>
+                        </div>
+                        <div className='md:basis-1/2 bg-pink-300 grid place-items-center h-96'>
+                            <div className='text-stone-700 text-center md:w-2/3'>
+                                <p className='font-bold md:text-6xl text-4xl'>Special Eliana waffles</p>
+                                <p className='font-semibold text-2xl mt-4 px-5 md:px-0'> 
                                     Dive into the unexpected flavors of the cafe Special and Ice cold 
                                         Lemonade Refreshers both with tastes you wont see coming</p>
                                 <button onClick={() => navigate('/homepage/all-products')} 
                                     className='border-2 border-stone-700 w-32 mt-5 py-2 rounded-3xl font-semibold'>Order now</button>
-                            </div>
-                        </div>
-                        <div className='basis-1/2'>
-                            <div className='h-full bg-cover bg-no-repeat bg-center' style={{backgroundImage: `url(${cafeBreakfast})`}}>
                             </div>
                         </div>
                     </div>

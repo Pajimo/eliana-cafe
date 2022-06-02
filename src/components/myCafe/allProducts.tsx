@@ -6,6 +6,8 @@ import { database } from "../../configuration/firebaseConfig";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Product from "./product";
 import { AiOutlineShopping } from "react-icons/ai";
+import Header from "./header";
+import { ViewProduct } from "../slice/viewProduct";
 
 export interface AllProductsProps {
     
@@ -16,7 +18,11 @@ interface Products{
 		total_orders: number,
 		total_price: number,
 		orders: (string | number)[]
-	}
+	},
+	viewProduct: {
+        product: [],
+        isActive: boolean
+    }
 }
 
 interface SingleProduct{
@@ -28,14 +34,12 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	//process.env.REACT_APP_NUTRITION_APIKEY
 
-	const auth = getAuth()
+	const auth = getAuth();
+	const dispatch = useDispatch();
 
-  	let cartProducts = useSelector((state: Products) => state.cart)
+  	let cartProducts = useSelector((state: Products) => state.cart);
+	let singleProduct = useSelector((state: Products) => state.viewProduct)
 
-	const [singleProduct, setSingleProduct] = useState<SingleProduct>({
-		state:false,
-		productId: {}
-	})
 
 	const add_product_to_db = async() => {    
 		onAuthStateChanged(auth, async(user) => {
@@ -60,44 +64,31 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		add_product_to_db()
 	}, [cartProducts])
 
-    const dispatch = useDispatch()
-
-    const [allProducts, setAllProducts] = useState([
-		{id: 1, name: 'capuchino', eachQuantity: 1, price: 50, total_price: 0}, 
-		{id: 2, name: 'Ice tea', eachQuantity: 1, price: 20, total_price: 0}, 
-		{id: 3, name: 'coffee', eachQuantity: 1, price: 5, total_price: 0}
-    ])
+    const [allProducts, setAllProducts] = useState([])
 
 	const addToCart = (order:any) => {
 		dispatch(ADD_TO_CART(order))
 	}
 	
 	const increaseQuantity = (id: number) => {
-		const oneOrder = allProducts.find((order:any) => order.id === id)
-		if(oneOrder){
-			oneOrder.eachQuantity++
-			//console.log(oneOrder.quantity)
-			setAllProducts([...allProducts])
-		}
+		// const oneOrder = allProducts.find((order:any) => order.id === id)
+		// if(oneOrder){
+		// 	oneOrder.eachQuantity++
+		// 	//console.log(oneOrder.quantity)
+		// 	setAllProducts([...allProducts])
+		// }
 	}
 
 	const decreaseQuantity = (id: number) => {
-		const oneOrder = allProducts.find((order:any) => order.id === id)!
-		if(oneOrder.eachQuantity > 1){
-			oneOrder.eachQuantity--
-			setAllProducts([...allProducts])
-		}
-	}
-
-	const showProduct = (product:any) => {
-		setSingleProduct({
-			state: true,
-			productId: product
-		})
+		// const oneOrder = allProducts.find((order:any) => order.id === id)!
+		// if(oneOrder.eachQuantity > 1){
+		// 	oneOrder.eachQuantity--
+		// 	setAllProducts([...allProducts])
+		// }
 	}
 
 	const fetchBetter = async() => {
-		const req = await fetch('https://trackapi.nutritionix.com/v2/search/instant', {
+		const req = await fetch('https://trackapi.nutritionix.com/v2/search/instant?query=coffee', {
 			method: 'GET',
 			headers: {
 				"x-app-id":"a634b53f",
@@ -106,7 +97,8 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 			}
 		})
 		const data = await req.json()
-		console.log(data)
+		console.log(data.common)
+		setAllProducts(data.common)
 	}
 
 	useEffect(() => {
@@ -115,25 +107,31 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
     return (
         <div className="relative">
-			{singleProduct.state && 
+			<Header color={'text-white'}/>
+			{singleProduct.isActive && 
 			<div className="absolute inset-0">
-				<Product props={singleProduct.productId} setProduct={setSingleProduct}/>
+				<Product />
 			</div>}
-			{cartProducts.orders.length} <span><AiOutlineShopping /></span>
-			<div className="grid md:grid-flow-col md:auto-cols-max place-content-center">
+			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt-3 shadow-2xl shadow-inner">
 				{allProducts.map((order: any) => {
 					return(
-						<div key={order.id} className='w-80 h-52 m-5 border-2 '>
-							<img src='' className="h-30 w-30" alt={order.name}/>
-							<h1>{order.name}</h1>
-							<div className="flex">
+						<div key={order.tag_id} className='md:w-80 h-52 m-5 ' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
+							<img src={order.photo.thumb} className="w-2/3 h-1/2" alt={order.name}/>
+							<h1 className="">{order.food_name}</h1>
+							{/* <div className="flex">
 								<button onClick={() => decreaseQuantity(order.id)}>-</button>
-								<h1>{order.eachQuantity}</h1>
+								<h1>{order.serving_qty}</h1>
 								<button onClick={() =>increaseQuantity(order.id)}>+</button>
-							</div>
-								<h1>${order.price}</h1>
-								<button onClick={() => showProduct(order)}>View</button>
-								<button onClick={() => addToCart(order)}>Add to bag</button>
+							</div> */}
+								<h1>${order.price || 20}</h1>
+								{/* <div>
+									<button className="w-1/2 py-1 mb-2 bg-orange-400 rounded-lg text-white" 
+										onClick={() => showProduct(order)}>View</button>
+								</div>
+								<div>
+									<button className="w-1/2 py-1 mb-2 bg-orange-400 rounded-lg text-white" 
+										onClick={() => addToCart(order)}>Add to bag</button>
+								</div> */}
 						</div>
 					)
 				})}

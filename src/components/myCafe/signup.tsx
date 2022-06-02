@@ -96,12 +96,13 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
         <React.Fragment>
             <ToastContainer />
             <div className='md:flex md:flex-row'>
-            	<div className="md:h-screen h-48 md:basis-5/12 bg-cover bg-center bg-no-repeat bg-orange-400">
+            	<div className="md:h-screen h-48 md:basis-5/12">
+					<img className="object-cover w-screen h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0WvQ_kO59Mlgj7UMdoZj4OQpSfJF7mfr14w&usqp=CAU" />
             	</div>
-				<div className='md:basis-7/12 grid place-items-center '>
+				<div className='md:basis-7/12 grid place-items-center mt-10'>
 					<div className=''>
-						<div className="flex justify-center" onClick={() => navigate('/')}>
-							<div className="logo">Home</div>
+						<div className="mb-5" onClick={() => navigate('/')}>
+							<div className="cursor-pointer logo bg-gray-200 shadow-2xl px-2 py-1 w-16 font-bold">Home</div>
 						</div>
 						<h1 className="text-3xl font-bold ">Sign up to Eliana Cafe</h1>
 						<button className='mt-5 w-full text-white rounded-lg mb-5 bg-blue-500 hover:bg-blue-400 py-2 font-semibold 
@@ -138,7 +139,7 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 							</div>
 							<button className='py-2 bg-orange-600 w-52 rounded-lg text-white font-semibold mt-5' onClick={(e)=> signUp(e)}>Create Account</button>
 						</form>
-            			<div className='mt-3'>
+            			<div className='mt-3 pb-20'>
 							<h1 className="">Already a Member? <span onClick={() => dispatch(checkAuthType('login'))}
 								className='text-blue-500 cursor-pointer'>Log in</span> </h1>
 						</div>

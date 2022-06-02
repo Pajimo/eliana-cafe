@@ -1,10 +1,12 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ViewProduct } from "../slice/viewProduct";
+
+
 
 
 interface ProductProps {
-    props: {}
-    setProduct: Dispatch<SetStateAction<SingleProduct>>
+
 }
 
 interface Products{
@@ -12,6 +14,10 @@ interface Products{
         total_orders: number,
         total_price: number,
         orders: (string | number)[]
+    },
+    viewProduct: {
+        product: [],
+        isActive: boolean
     }
 }
 
@@ -19,30 +25,23 @@ interface SingleProduct{
     state: boolean,
     productId: {}
 }
- 
-const Product: React.FunctionComponent<ProductProps> = ({props, setProduct}) => {
 
+const Product: React.FunctionComponent<ProductProps> = () => {
+
+    const dispatch = useDispatch()
 
     let cartProducts = useSelector((state: Products) => state.cart)
 
-    // interface SingleProduct{
-    //     id:number
-    // }
-
-    const [singleProduct, setSingleProduct] = useState<object[]>([])
-
-    useEffect(() => {
-        setSingleProduct([props])
-    }, [props])
+    let singleProduct = useSelector((state: Products) => state.viewProduct)
 
     return ( 
         <div className="modal text-white">
             <div className="modal-content">
                 <div className="modal-body text-stone-700 bg-white">
-                    <div onClick={() => setProduct({state: false, productId: {}})}>close</div>
-                    {singleProduct.map((one:any) => {
+                    <div onClick={() => dispatch(ViewProduct({isActive: false}))}>close</div>
+                    {singleProduct.product.map((one:any) => {
                         return(
-                            <div key={one.id}>{one.name}</div>
+                            <div key={one.id}>{one.food_name}</div>
                         )
                     })}
                 </div>

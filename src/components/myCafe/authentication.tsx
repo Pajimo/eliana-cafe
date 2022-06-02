@@ -24,12 +24,15 @@ interface AuthType{
  
 const Authentication: React.FunctionComponent<AuthenticationProps> = () => {
 
-    const auth = getAuth()
+    const auth = getAuth();
+    const dispatch = useDispatch()
 
     const authType = useSelector((state: AuthType) => state.auth)
 
-
-    console.log(auth)
+    useEffect(() => {
+        const initialAuth = localStorage.getItem('authType')
+        dispatch(checkAuthType(initialAuth))
+    }, [])
 
     if(authType === 'login'){
         return(
