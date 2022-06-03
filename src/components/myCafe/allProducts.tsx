@@ -8,6 +8,7 @@ import Product from "./product";
 import { AiOutlineShopping } from "react-icons/ai";
 import Header from "./header";
 import { ViewProduct } from "../slice/viewProduct";
+import { getProducts } from "../contentful/contentfulApi";
 
 export interface AllProductsProps {
     
@@ -36,10 +37,12 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	const auth = getAuth();
 	const dispatch = useDispatch();
+	const getAllProducts = getProducts()
 
   	let cartProducts = useSelector((state: Products) => state.cart);
 	let singleProduct = useSelector((state: Products) => state.viewProduct)
-
+	
+	const [cafeProducts, setCafeProducts]= useState<string[] | number[]>()
 
 	const add_product_to_db = async() => {    
 		onAuthStateChanged(auth, async(user) => {
@@ -88,21 +91,16 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 	}
 
 	const fetchBetter = async() => {
-		const req = await fetch('https://trackapi.nutritionix.com/v2/search/instant?query=coffee', {
-			method: 'GET',
-			headers: {
-				"x-app-id":"a634b53f",
-				"x-app-key":"420e3bb072d1b99cc70331b9e980360d",  
-				'Content-Type': 'application/json'
-			}
-		})
+		const req = await fetch('https://cdn.contentful.com/spaces/rwgie9mbh5yo/environments/master/entries/?access_token=v7TRI_Ex99jhwO38ird5AYjeFFDECrPw0PvI3aIdTEk')
 		const data = await req.json()
-		console.log(data.common)
-		setAllProducts(data.common)
+		console.log(data.items)
 	}
 
 	useEffect(() => {
 		fetchBetter()
+		getAllProducts.then((products: string[] | number[]) => {
+			setCafeProducts(products)
+		})
 	}, [])
 
     return (
@@ -113,17 +111,18 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 				<Product />
 			</div>}
 			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt-3 shadow-2xl shadow-inner">
-				{allProducts.map((order: any) => {
+				{cafeProducts &&  cafeProducts.map((order: any) => {
+					const {fields} = order
 					return(
-						<div key={order.tag_id} className='md:w-80 h-52 m-5 ' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
-							<img src={order.photo.thumb} className="w-2/3 h-1/2" alt={order.name}/>
-							<h1 className="">{order.food_name}</h1>
+						<div key={fields.id} className='md:w-80 h-52 m-5 ' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
+							<img src={fields.productImage.fields.file.url} className="w-2/3 h-1/2 bg-red-300 rounded-full object-center" alt={order.foodName}/>
+							<h1 className="font-semibold">{fields.foodName}</h1>
 							{/* <div className="flex">
 								<button onClick={() => decreaseQuantity(order.id)}>-</button>
 								<h1>{order.serving_qty}</h1>
 								<button onClick={() =>increaseQuantity(order.id)}>+</button>
 							</div> */}
-								<h1>${order.price || 20}</h1>
+								<h1>${fields.price || 20}</h1>
 								{/* <div>
 									<button className="w-1/2 py-1 mb-2 bg-orange-400 rounded-lg text-white" 
 										onClick={() => showProduct(order)}>View</button>

@@ -15,14 +15,13 @@ const cartSlice = createSlice({
         ADD_TO_CART: (state, action) =>{
             const newOrder = action.payload
             console.log(newOrder)
-            const existingOrder = state.orders.find(order => order.tag_id === newOrder.tag_id)
+            const existingOrder = state.orders.find(order => order.id === newOrder.id)
 
             if(existingOrder){
-                existingOrder.eachQuantity++
-                existingOrder.total_price+= action.payload.price
+                existingOrder.quantity = existingOrder.quantity + newOrder.quantity
+                existingOrder.total_price+= newOrder.total_price
             }else{
                 state.orders.push(newOrder)
-                newOrder.total_price = newOrder.price * newOrder.eachQuantity
                 state.total_order = state.orders.length
             }
 

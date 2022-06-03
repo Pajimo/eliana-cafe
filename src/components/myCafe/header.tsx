@@ -83,7 +83,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({color}) => {
             <div ref={colorRef} className='text-white flex items-center justify-between px-5 md:px-20 py-3 relative'>
                 <div className="text-5xl font-extrabold" onClick={() => navigate('/')}>
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-                        ELIANA CAFE
+                        E
                     </span>
                 </div>
                 <div className='desktopview'>

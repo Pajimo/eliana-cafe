@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    product: [],
+    product: {},
     isActive: false
 }
 
@@ -10,7 +10,7 @@ const viewProductSlice = createSlice({
     initialState,
     reducers:{
         ViewProduct(state, action){
-            state.product[0] = action.payload.order
+            state.product = action.payload.order
             state.isActive = action.payload.isActive
         }
     }
