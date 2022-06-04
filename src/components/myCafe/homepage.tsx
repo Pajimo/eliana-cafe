@@ -42,8 +42,8 @@ const HomePage: React.FunctionComponent<HomePageProps> = () => {
     return ( 
         <React.Fragment>
             <div className='relative'>
-                <div className='absolute inset-x-0 top-0'>
-                    <Header color={'randomNonsense'}/>
+                <div className=''>
+                    <Header />
                 </div>
                 <div className='md:flex md:h-96 mb-10'>
                     <div className='md:basis-1/2'>

@@ -105,7 +105,7 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
     return (
         <div className="relative">
-			<Header color={'text-white'}/>
+			<Header />
 			{singleProduct.isActive && 
 			<div className="absolute inset-0">
 				<Product />
@@ -114,8 +114,8 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 				{cafeProducts &&  cafeProducts.map((order: any) => {
 					const {fields} = order
 					return(
-						<div key={fields.id} className='md:w-80 h-52 m-5 ' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
-							<img src={fields.productImage.fields.file.url} className="w-2/3 h-1/2 bg-red-300 rounded-full object-center" alt={order.foodName}/>
+						<div key={fields.id} className='md:w-80 h-52 m-5 cursor-pointer' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
+							<img src={fields.productImage.fields.file.url} className=" h-1/2 bg-red-300 rounded-full object-center" alt={order.foodName}/>
 							<h1 className="font-semibold">{fields.foodName}</h1>
 							{/* <div className="flex">
 								<button onClick={() => decreaseQuantity(order.id)}>-</button>

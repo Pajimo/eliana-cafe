@@ -33,7 +33,7 @@ const cartSlice = createSlice({
             eachOrderPrice = 0
         },
         REMOVE_FROM_CART(state, action){
-            return state.orders.filter(order => order.id !== action.payload)
+            return state = action.payload
         },
         UPDATE_CART(state, action){
             for (var i = 0; i < action.payload.length; i++){

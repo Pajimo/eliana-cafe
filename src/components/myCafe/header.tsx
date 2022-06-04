@@ -8,26 +8,27 @@ import { AiOutlineShopping, AiOutlineUnorderedList } from "react-icons/ai";
 import { ToggleSidepanel } from '../slice/sidepanel';
 
 interface HeaderProps {
-    color: string
+    
 }
 
 interface Products{
 	cart: {
-		total_orders: number,
+		total_order: number,
 		total_price: number,
 		orders: (string | number)[]
-	}
+	},
 }
 
 interface SidePanel{
     sidepanel: boolean
 }
  
-const Header: React.FunctionComponent<HeaderProps> = ({color}) => {
+const Header: React.FunctionComponent<HeaderProps> = () => {
 
     const auth = getAuth();
     const colorRef:any = useRef();
     const colorBlack: any = useRef();
+    const colorBlack2: any = useRef();
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
@@ -66,10 +67,6 @@ const Header: React.FunctionComponent<HeaderProps> = ({color}) => {
 
     useEffect(() => {
         fetchInitialAuth()
-        colorRef.current.classList.remove(color)
-        setTimeout(() => {
-            colorBlack.current.classList.add(color)
-        }, 1000)
     }, [])
 
 
@@ -80,21 +77,21 @@ const Header: React.FunctionComponent<HeaderProps> = ({color}) => {
 
     return ( 
         <React.Fragment>
-            <div ref={colorRef} className='text-white flex items-center justify-between px-5 md:px-20 py-3 relative'>
+            <div ref={colorRef} className='flex items-center justify-between px-5 md:px-20 py-3 relative'>
                 <div className="text-5xl font-extrabold" onClick={() => navigate('/')}>
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 cursor-pointer">
                         E
                     </span>
                 </div>
                 <div className='desktopview'>
                     {isLoggedIn ? 
-                    <button onClick={authSubmit}>Sign Out</button>
+                    <button className='bg-black rounded-2xl w-24 py-1' onClick={authSubmit}>Sign Out</button>
                     :
                     <div className='flex'>
                         <button className='rounded-2xl w-24 py-1 mr-4 border-black border-2' onClick={() => authenticate('login')}>Sign in</button>
-                        <button ref={colorBlack} className='bg-black rounded-2xl w-24 py-1' onClick={() => authenticate('signup')}>Join now</button>
+                        <button ref={colorBlack2} className='bg-black rounded-2xl w-24 py-1 text-white' onClick={() => authenticate('signup')}>Join now</button>
                         <div className='relative px-2' onClick={() => navigate('/your-bag')}>
-                            <div ref={colorBlack} className='absolute right-0 top-0 bg-black rounded-3xl px-1 text-sm'>{cartProducts.orders.length} </div><span><AiOutlineShopping size={35}/></span>
+                            <div ref={colorBlack} className='absolute right-0 top-0 bg-black rounded-3xl px-1 text-sm text-white'>{cartProducts.total_order} </div><span><AiOutlineShopping size={35}/></span>
                         </div>
                     </div>}
                 </div>
