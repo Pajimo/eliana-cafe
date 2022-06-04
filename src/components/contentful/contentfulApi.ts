@@ -1,8 +1,8 @@
 var contentful = require('contentful');
 
 var client = contentful.createClient({
-    space: 'rwgie9mbh5yo',
-    accessToken: 'v7TRI_Ex99jhwO38ird5AYjeFFDECrPw0PvI3aIdTEk',
+    space: process.env.REACT_APP_SPACE_ID,
+    accessToken: process.env.REACT_APP_CONTENT_DELIVERY_API,
 });
 
 type Response = {
