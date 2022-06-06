@@ -2,6 +2,10 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ViewProduct } from "../slice/viewProduct";
 import { ADD_TO_CART,  } from "../slice/cartSlice";
+import {IsLoading} from '../slice/isLoadingSlice'
+import LoadingState from './loadingState'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 interface ProductProps {
@@ -34,9 +38,8 @@ interface Products{
     }
 }
 
-interface SingleProduct{
-    state: boolean,
-    productId: {}
+interface loading {
+    loading: boolean
 }
 
 const Product: React.FunctionComponent<ProductProps> = () => {
@@ -46,12 +49,15 @@ const Product: React.FunctionComponent<ProductProps> = () => {
     const [quantity, setQuantity]= useState<string>()
 
     let cartProducts = useSelector((state: Products) => state.cart)
-
+    let getLoading = useSelector((state: loading) => state.loading)
     let singleProduct = useSelector((state: Products) => state.viewProduct.product.fields)
 
-    console.log(singleProduct)
+    useEffect(() => {
+        dispatch(IsLoading(false))
+    }, [])
 
     const addToCart = (order:any) => {
+        dispatch(IsLoading(true))
         const quant = Number(quantity)
         const newOrder = {
             ...order,
@@ -59,9 +65,20 @@ const Product: React.FunctionComponent<ProductProps> = () => {
             total_price: (quant * singleProduct.price) | singleProduct.price
         }
 		dispatch(ADD_TO_CART(newOrder))
+        dispatch(IsLoading(false))
+        toast('Product added')
 	}
 
+    if(getLoading){
+
+        return(
+            <LoadingState />
+        )
+    }
+
     return ( 
+        <div>
+        <ToastContainer />
         <div className="modal w-screen">
             <div className="modal-content h-full md:w-8/12 w-11/12">
                 <div className="modal-body text-stone-700 bg-white ">
@@ -83,7 +100,7 @@ const Product: React.FunctionComponent<ProductProps> = () => {
                                         <option value={3}>3</option>
                                         <option value={4}>4</option>
                                         <option value={5}>5</option>
-                                        <option value={6}>6</option>
+                                        
                                     </select>
                                 </div>
                                     <p className="mb-5 text-xl font-semibold">${singleProduct.price}</p>
@@ -96,6 +113,7 @@ const Product: React.FunctionComponent<ProductProps> = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
      );
 }

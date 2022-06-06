@@ -9,6 +9,9 @@ import { AiOutlineShopping } from "react-icons/ai";
 import Header from "./header";
 import { ViewProduct } from "../slice/viewProduct";
 import { getProducts } from "../contentful/contentfulApi";
+import {IsLoading} from '../slice/isLoadingSlice'
+import LoadingState from './loadingState'
+import { useNavigate } from "react-router-dom";
 
 export interface AllProductsProps {
     
@@ -26,9 +29,8 @@ interface Products{
     }
 }
 
-interface SingleProduct{
-    state: boolean,
-    productId: {}
+interface loading {
+    loading: boolean
 }
  
 const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
@@ -37,23 +39,28 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	const auth = getAuth();
 	const dispatch = useDispatch();
-	const getAllProducts = getProducts()
+	const getAllProducts = getProducts();
+	const navigate = useNavigate()
 
   	let cartProducts = useSelector((state: Products) => state.cart);
 	let singleProduct = useSelector((state: Products) => state.viewProduct)
-	
+	let getLoading = useSelector((state: loading) => state.loading)
+	console.log(cartProducts)
 	const [cafeProducts, setCafeProducts]= useState<string[] | number[]>()
 
 	const add_product_to_db = async() => {    
 		onAuthStateChanged(auth, async(user) => {
 			if (user) {
+				dispatch(IsLoading(true))
 				// User is signed in, see docs for a list of available properties
 				// https://firebase.google.com/docs/reference/js/firebase.User
 				
 				const uid = user.uid ;
+				console.log(cartProducts.orders)
 				await setDoc(doc(database, uid, "CartProducts"), {
 					cartProducts: cartProducts.orders
 				})
+				dispatch(IsLoading(false))
 			} else{
 			// ...
 			// User is signed out
@@ -67,11 +74,10 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		add_product_to_db()
 	}, [cartProducts])
 
-    const [allProducts, setAllProducts] = useState([])
 
-	const addToCart = (order:any) => {
-		dispatch(ADD_TO_CART(order))
-	}
+	// const addToCart = (order:any) => {
+	// 	dispatch(ADD_TO_CART(order))
+	// }
 	
 	const increaseQuantity = (id: number) => {
 		// const oneOrder = allProducts.find((order:any) => order.id === id)
@@ -90,18 +96,22 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 		// }
 	}
 
-	const fetchBetter = async() => {
-		const req = await fetch('https://cdn.contentful.com/spaces/rwgie9mbh5yo/environments/master/entries/?access_token=v7TRI_Ex99jhwO38ird5AYjeFFDECrPw0PvI3aIdTEk')
-		const data = await req.json()
-		console.log(data.items)
-	}
-
 	useEffect(() => {
-		fetchBetter()
 		getAllProducts.then((products: string[] | number[]) => {
 			setCafeProducts(products)
 		})
 	}, [])
+
+	useEffect(() => {
+		dispatch(IsLoading(false))
+	}, [cafeProducts])
+
+	if(getLoading){
+
+        return(
+            <LoadingState />
+        )
+    }
 
     return (
         <div className="relative">
@@ -110,7 +120,11 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 			<div className="absolute inset-0">
 				<Product />
 			</div>}
-			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt-3 shadow-2xl shadow-inner">
+			<div className="flex my-2 border-t-2 ml-2">
+                <p className="cursor-pointer mr-1" onClick={() => navigate('/')}>Home /</p>
+				<p className="cursor-pointer ml-1 font-bold">Menu</p>
+            </div>
+			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt- shadow-2xl shadow-inner">
 				{cafeProducts &&  cafeProducts.map((order: any) => {
 					const {fields} = order
 					return(

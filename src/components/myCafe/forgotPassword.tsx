@@ -1,24 +1,38 @@
-import React, { useState } from 'react'
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
+import {IsLoading} from '../slice/isLoadingSlice'
+import LoadingState from './loadingState'
+import { useNavigate } from 'react-router-dom';
 
 interface ForgotPasswordProps {
     
+}
+
+interface loading {
+    loading: boolean
 }
  
 const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = () => {
 
     const dispatch = useDispatch()
 
-    const auth = getAuth()
+    const auth = getAuth();
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState('')
 
+    let getLoading = useSelector((state: loading) => state.loading)
+
+    useEffect(() => {
+        dispatch(IsLoading(false))
+    }, [])
 
     const sendResetInstruction = () => {
+        dispatch(IsLoading(true))
         if(!email){
             toast.error("Enter your email address")
         }else{
@@ -35,6 +49,14 @@ const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = () => {
             // ..
             });
         }
+        dispatch(IsLoading(false))
+    }
+
+    if(getLoading){
+
+        return(
+            <LoadingState />
+        )
     }
 
     return ( 
@@ -46,8 +68,11 @@ const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = () => {
             	</div>
 				<div className='md:basis-7/12 grid place-items-center '>
 					<div className=''>
-						<div className="mb-5" onClick={() => dispatch(checkAuthType('login'))}>
-							<div className="cursor-pointer logo p-3 bg-gray-200 shadow-xl w-16 font-bold mt-5 mb-10">Back</div>
+                        <div className="flex my-2 border-t-2">
+							<p className="cursor-pointer mr-1" onClick={() => navigate('/')}>Home </p>
+							<p className="cursor-pointer" onClick={() => navigate('/homepage/all-products')}>/ {"Menu"} /</p>
+							<p className="cursor-pointer ml-1" onClick={() => dispatch(checkAuthType('login'))}>Authentication - Login /</p>
+							<div className="cursor-pointer font-bold ml-1" >Forgot Password</div>
 						</div>
 						<h1 className="text-2xl font-bold ">Forgot Password?</h1>
                         <p className='mt-5  w-96'>Enter the email address you used when you joined and we’ll send you 

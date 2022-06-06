@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartSlice from "../slice/cartSlice";
 import authSlice from "../slice/authSlice";
 import SidePanelSlice from "../slice/sidepanel";
+import LoadingSlice from "../slice/isLoadingSlice";
 import viewProductSlice from "../slice/viewProduct";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
         auth: authSlice.reducer,
         cart: cartSlice.reducer,
         sidepanel: SidePanelSlice.reducer,
-        viewProduct: viewProductSlice.reducer
+        viewProduct: viewProductSlice.reducer,
+        loading: LoadingSlice.reducer
     }
 })

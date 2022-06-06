@@ -33,12 +33,22 @@ const cartSlice = createSlice({
             eachOrderPrice = 0
         },
         REMOVE_FROM_CART(state, action){
-            return state = action.payload
+            const remainingOrder = state.orders.filter(order => order.id !== action.payload)
+            console.log(remainingOrder)
+            state.orders = remainingOrder
+            state.total_order--
         },
         UPDATE_CART(state, action){
             for (var i = 0; i < action.payload.length; i++){
                 state.orders.push(action.payload[i])
             }
+            state.total_order = action.payload.length
+            for(var i = 0; i < state.orders.length; i++){
+                //console.log(state.orders.length[i])
+                eachOrderPrice = eachOrderPrice + state.orders[i].total_price
+            }
+            state.total_price = eachOrderPrice
+            eachOrderPrice = 0
         }
     }
 })

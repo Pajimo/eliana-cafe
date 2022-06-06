@@ -4,16 +4,33 @@ import { getAuth,
     signInWithPopup,
     signInWithEmailAndPassword, 
     updateProfile,
-    sendPasswordResetEmail } from "firebase/auth";
-import { useDispatch } from "react-redux";
+    sendPasswordResetEmail, onAuthStateChanged} from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from "react-icons/fc";
 import {useNavigate} from 'react-router-dom'
+import {IsLoading} from '../slice/isLoadingSlice'
+import LoadingState from './loadingState'
+import { UPDATE_CART } from "../slice/cartSlice";
+import { setDoc, doc } from "firebase/firestore";
+import { database } from '../../configuration/firebaseConfig'
 
 interface LoginProps {
     
+}
+
+interface loading {
+	loading: boolean
+}
+
+interface Products{
+	cart: {
+		total_orders: number,
+		total_price: number,
+		orders: (string | number)[]
+	}
 }
  
 const Login: React.FunctionComponent<LoginProps> = () => {
@@ -35,6 +52,12 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 		});
 	  };
 
+	let getLoading = useSelector((state: loading) => state.loading)
+
+	useEffect(() => {
+		dispatch(IsLoading(false))
+	}, [])  
+
     const signIn = async (e: any) =>{
 		e.preventDefault()
         if(!userProfile.email){
@@ -42,12 +65,17 @@ const Login: React.FunctionComponent<LoginProps> = () => {
         }else if(!userProfile.password){
           toast.error('Enter your password')
         }else{
+			dispatch(IsLoading(true))
            signInWithEmailAndPassword(auth, userProfile.email, userProfile.password)
-          .then((userCredential) => {
+          .then( async(userCredential) => {
               // Signed in 
               //setUser(userCredential.user);
-              toast('Signed In Successsfully')   
+              toast('Signed In Successsfully');
+			  setTimeout(() => {
+				navigate('/homepage/all-products') 
+			  }, 1000)
         // ...
+
           })
           .catch((error: any) => {
             const errorCode = error.code;
@@ -67,6 +95,13 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 		dispatch(checkAuthType('forgot'))
       }
 
+	if(getLoading){
+
+        return(
+            <LoadingState />
+        )
+    }  
+
     return ( 
         <React.Fragment>
             <ToastContainer />
@@ -76,8 +111,10 @@ const Login: React.FunctionComponent<LoginProps> = () => {
             	</div>
 				<div className='md:basis-7/12 grid place-items-center mt-10'>
 					<div className=''>
-						<div className="mb-5" onClick={() => navigate('/')}>
-							<div className="cursor-pointer logo bg-gray-200 shadow-2xl px-2 py-1 w-16 font-bold">Home</div>
+						<div className="flex my-2 border-b-2">
+							<p className="cursor-pointer mr-1" onClick={() => navigate('/')}>Home </p>
+							<p className="cursor-pointer" onClick={() => navigate('/homepage/all-products')}>/ {"Menu"} /</p>
+							<p className="cursor-pointer font-bold ml-1">Authentication - Sign in</p>
 						</div>
 						<h1 className="text-2xl font-bold ">Sign in to Eliana Cafe</h1>
 						<button className='mt-5 w-full text-white rounded-lg mb-5 bg-blue-500 hover:bg-blue-400 py-2 font-semibold flex 
