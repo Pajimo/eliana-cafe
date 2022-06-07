@@ -17,6 +17,7 @@ Below are technologies involved:
 - Contentful-CMS
 - Firebase
 - TailwindCSS
+- Git / GitHub
 - Firestore
 - Firebase Auth
 - React-Router-Dom
