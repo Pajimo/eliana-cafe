@@ -89,7 +89,7 @@ const Product: React.FunctionComponent<ProductProps> = () => {
                         <p className="text-2xl font-bold my-5 text-center">{singleProduct.foodName}</p>
                         <div className="md:flex md:py-7">
                             <div>
-                                <img src={singleProduct.productImage.fields.file.url} className='bg-blue-900'/>
+                                <img src={singleProduct.productImage.fields.file.url} className='bg-gray-400'/>
                             </div>
                             <div className="md:w-full md:mx-5">
                                 <div>
@@ -105,7 +105,7 @@ const Product: React.FunctionComponent<ProductProps> = () => {
                                 </div>
                                     <p className="mb-5 text-xl font-semibold">${singleProduct.price}</p>
                                 <div>
-                                    <button className="w-full py-1 mb-2 bg-orange-400 rounded-lg text-white text-xl font-semibold" 
+                                    <button className="w-full py-1 mb-2 bg-gray-900 rounded-lg text-white text-xl font-semibold" 
                                         onClick={() => addToCart(singleProduct)}>Add to bag</button>
                                 </div>
                             </div>

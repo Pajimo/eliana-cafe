@@ -14,11 +14,23 @@ const LoadingState: React.FunctionComponent<LoadingStateProps> = () => {
 		// }, 1000)
 	}, [Loadingref])
 
+	const items = [
+		'Shaking the shake', 
+		'Brewing the coffee', 
+		'Cafe Opening', 
+		'Adding Milk', 
+		'Making Toast', 
+		'Setting Shop', 
+		'Sipping Coffee', 
+		'Adding Ice',
+		'Serving Customers'
+	]
+
 
     return ( 
         <React.Fragment>
 			<div className="grid place-items-center h-screen">
-				<svg aria-labelledby="coffee-cup-loading-title-1" className="my9 sb-loadingCoffeeCup w-20" role="img" viewBox="0 0 73 85">
+				<svg aria-labelledby="coffee-cup-loading-title-1" className="sb-loadingCoffeeCup w-20 h-20" role="img" viewBox="0 0 73 85">
 					<title id="coffee-cup-loading-title-1">Loading content... (steaming coffee cup)</title>
 					<g>
 						<path d="M53.8 38.6c-2-4-9.6-7.2-17.6-7.2-8 0-15.2 3.2-17.6 7.2 0 0 3.6 8 18.4 8 13.6-.4 16.8-8 16.8-8z" fill="#000000" stroke="#000000" 
@@ -44,6 +56,7 @@ const LoadingState: React.FunctionComponent<LoadingStateProps> = () => {
 								strokeLinejoin="round" strokeWidth="2"></path>
 					</g>
 				</svg>
+				<p>{items[Math.floor(Math.random()*items.length)]}</p>
 			</div>
         </React.Fragment> 
 		);

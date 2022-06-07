@@ -14,7 +14,6 @@ const cartSlice = createSlice({
     reducers:{
         ADD_TO_CART: (state, action) =>{
             const newOrder = action.payload
-            console.log(newOrder)
             const existingOrder = state.orders.find(order => order.id === newOrder.id)
 
             if(existingOrder){

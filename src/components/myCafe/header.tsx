@@ -92,6 +92,9 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
                 <div className='desktopview'>
                     {isLoggedIn ? 
                     <div className='flex'>
+                        <div className='mr-4'>
+                            <button className='rounded-2xl w-24 py-1 border-black border-2 text-black font-semibold' onClick={() => navigate('/homepage/all-products')}>Menu</button>
+                        </div>
                         <button className='bg-black text-white rounded-2xl w-24 py-1' onClick={authSubmit}>Sign Out</button>
                         <div className='relative px-2 cursor-pointer' onClick={() => navigate('/your-bag')}>
                             <div ref={colorBlack} className='absolute right-0 top-0 bg-black rounded-3xl px-1 text-sm text-white'>{cartProducts.total_order} </div><span><AiOutlineShopping size={35}/></span>
@@ -99,6 +102,9 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
                     </div>
                     :
                     <div className='flex'>
+                        <div className='mr-4'>
+                            <button className='rounded-2xl w-24 py-1 border-black border-2 text-black font-semibold' onClick={() => navigate('/homepage/all-products')}>Menu</button>
+                        </div>
                         <button className='rounded-2xl w-24 py-1 mr-4 border-black border-2' onClick={() => authenticate('login')}>Sign in</button>
                         <button ref={colorBlack2} className='bg-black rounded-2xl w-24 py-1 text-white' onClick={() => authenticate('signup')}>Join now</button>
                         <div className='relative px-2 cursor-pointer' onClick={() => navigate('/your-bag')}>
@@ -119,10 +125,13 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
                                         <div className='text-white text-4xl flex justify-end'>
                                             <p onClick={() => dispatch(ToggleSidepanel(false))} className='bg-black rounded-full px-2'>X</p>
                                         </div>
-                                        <div className='flex justify-end my-10'>
+                                        <div className='flex justify-end mt-10'>
                                             <div className='relative px-2 text-black ' onClick={() => navigate('/your-bag')}>
                                                 <div className='absolute right-0 top-0 bg-black rounded-3xl px-1 text-sm text-white'>{cartProducts.orders.length} </div><span><AiOutlineShopping size={35}/></span>
                                             </div>
+                                        </div>
+                                        <div className='mb-4 mt-10'>
+                                            <button className='rounded-2xl w-full py-1 border-black border-2 text-black font-semibold' onClick={() => navigate('/homepage/all-products')}>Menu</button>
                                         </div>
                                         <div>
                                             <button className='bg-black rounded-2xl w-full py-1 font-semibold text-white' onClick={authSubmit}>Sign Out</button>

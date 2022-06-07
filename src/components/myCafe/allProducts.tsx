@@ -35,7 +35,8 @@ interface loading {
 
 interface CategoryShuffle{
 	fields:{
-		category: string
+		category: string,
+		categories: any[]
 	}
 }
  
@@ -118,8 +119,16 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	const shuffleCafe = (cate: string) => {
 		if(cafeProducts) {
-			console.log(cafeProducts)
-			const shuffleCategory = cafeProducts.filter((cafe: CategoryShuffle) => cafe.fields.category === cate)
+			const shuffleCategory = cafeProducts.filter((cafe: CategoryShuffle) => {
+				for(let i = 0; i < cafe.fields.categories.length; i++){
+					if(cafe.fields.categories[i] === cate){
+						return cafe.fields
+					}
+					// console.log(cafe.fields.categories[i] === cate)
+					// return cafe.fields.categories[i] === cate
+					//return cafe.fields.categories[i] === cate
+				}
+			})
 			setCategory(shuffleCategory)
 		}
 		if(cate === 'All'){
@@ -145,29 +154,43 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
                 <p className="cursor-pointer mr-1" onClick={() => navigate('/')}>Home /</p>
 				<p className="cursor-pointer ml-1 font-bold">Menu</p>
             </div>
-			<div className="flex my-2 border-t-2 pl-10 px-10">
-				<div className="md:mr-20 mr-10">
+			<div className="flex my-2 border-t-2 overflow-scroll overflow-y-hidden px-10 py-2 items-center">
+				<div className="md:mr-12 mr-7 font-semibold">
 					Categories:
 				</div>
-				<div className="flex">
-					<p className="mr-5" onClick={() => shuffleCafe('All')}>All</p>
-					<div className="mr-5" onClick={() => shuffleCafe('coffee')}>Coffee</div>
-					<div className="mr-5" onClick={() => shuffleCafe('Sandwich')}>Sandwich</div>
+				<div className="flex items-center text-gray-800">
+					<p className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('All')}>All</p>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Coffee')}>Coffee</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Special')}>Special</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Food')}>Food</div>
+					<div className="mr-5 cursor-pointer focus:border-b-2 focus:text-red-400 hover:text-black hover:font-bold" onClick={() => shuffleCafe('Drink')}>Drinks</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Sandwich')}>Sandwich</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Tea')}>Tea</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Espresso')}>Espresso</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Latte')}>Latte</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Breakfast')}>Breakfast</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Caffe')}>Caffe</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Chocolate ')}>Chocolate</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Vanilla ')}>Vanilla</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Frappuccino ')}>Frappuccino</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Bacon')}>Bacon</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Egg')}>Egg</div>
+					<div className="mr-5 cursor-pointer hover:text-black hover:font-bold" onClick={() => shuffleCafe('Caramel ')}>Caramel</div>
 				</div>
 			</div>
-			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt- shadow-2xl shadow-inner">
+			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 shadow-2xl shadow-inner px-10 pt-5">
 				{category &&  category.map((order: any) => {
 					const {fields} = order
 					return(
-						<div key={fields.id} className='md:w-80 h-52 m-5 cursor-pointer' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
-							<img src={fields.productImage.fields.file.url} className=" h-1/2 bg-red-300 rounded-full object-center" alt={order.foodName}/>
+						<div key={fields.id} className='md:w-80 h-52 pt-5 cursor-pointer' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>
+							<img src={fields.productImage.fields.file.url} className=" h-1/2 bg-gray-800 rounded-full object-center" alt={order.foodName}/>
 							<h1 className="font-semibold">{fields.foodName}</h1>
 							{/* <div className="flex">
 								<button onClick={() => decreaseQuantity(order.id)}>-</button>
 								<h1>{order.serving_qty}</h1>
 								<button onClick={() =>increaseQuantity(order.id)}>+</button>
 							</div> */}
-								<h1>${fields.price || 20}</h1>
+							<h1>${fields.price || 20}</h1>
 								{/* <div>
 									<button className="w-1/2 py-1 mb-2 bg-orange-400 rounded-lg text-white" 
 										onClick={() => showProduct(order)}>View</button>
