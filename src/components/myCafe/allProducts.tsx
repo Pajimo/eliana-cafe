@@ -32,6 +32,12 @@ interface Products{
 interface loading {
     loading: boolean
 }
+
+interface CategoryShuffle{
+	fields:{
+		category: string
+	}
+}
  
 const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
@@ -45,10 +51,11 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
   	let cartProducts = useSelector((state: Products) => state.cart);
 	let singleProduct = useSelector((state: Products) => state.viewProduct)
 	let getLoading = useSelector((state: loading) => state.loading)
-	console.log(cartProducts)
-	const [cafeProducts, setCafeProducts]= useState<string[] | number[]>()
 
-	const add_product_to_db = async() => {    
+	const [cafeProducts, setCafeProducts]:any[]= useState()
+	const [category, setCategory]:any[] = useState()
+
+	const add_product_to_db = () => {    
 		onAuthStateChanged(auth, async(user) => {
 			if (user) {
 				dispatch(IsLoading(true))
@@ -56,7 +63,6 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 				// https://firebase.google.com/docs/reference/js/firebase.User
 				
 				const uid = user.uid ;
-				console.log(cartProducts.orders)
 				await setDoc(doc(database, uid, "CartProducts"), {
 					cartProducts: cartProducts.orders
 				})
@@ -103,8 +109,23 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 	}, [])
 
 	useEffect(() => {
+		setCategory(cafeProducts)
+	}, [cafeProducts])
+
+	useEffect(() => {
 		dispatch(IsLoading(false))
 	}, [cafeProducts])
+
+	const shuffleCafe = (cate: string) => {
+		if(cafeProducts) {
+			console.log(cafeProducts)
+			const shuffleCategory = cafeProducts.filter((cafe: CategoryShuffle) => cafe.fields.category === cate)
+			setCategory(shuffleCategory)
+		}
+		if(cate === 'All'){
+			setCategory(cafeProducts)
+		}
+	}
 
 	if(getLoading){
 
@@ -120,12 +141,22 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 			<div className="absolute inset-0">
 				<Product />
 			</div>}
-			<div className="flex my-2 border-t-2 ml-2">
+			<div className="flex my-2 border-t-2 pl-10">
                 <p className="cursor-pointer mr-1" onClick={() => navigate('/')}>Home /</p>
 				<p className="cursor-pointer ml-1 font-bold">Menu</p>
             </div>
+			<div className="flex my-2 border-t-2 pl-10 px-10">
+				<div className="md:mr-20 mr-10">
+					Categories:
+				</div>
+				<div className="flex">
+					<p className="mr-5" onClick={() => shuffleCafe('All')}>All</p>
+					<div className="mr-5" onClick={() => shuffleCafe('coffee')}>Coffee</div>
+					<div className="mr-5" onClick={() => shuffleCafe('Sandwich')}>Sandwich</div>
+				</div>
+			</div>
 			<div className="grid md:grid-cols-3 grid-cols-2 gap-4 place-content-center border-t-2 mt- shadow-2xl shadow-inner">
-				{cafeProducts &&  cafeProducts.map((order: any) => {
+				{category &&  category.map((order: any) => {
 					const {fields} = order
 					return(
 						<div key={fields.id} className='md:w-80 h-52 m-5 cursor-pointer' onClick={() => dispatch(ViewProduct({order, isActive: true}))}>

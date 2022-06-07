@@ -49,7 +49,6 @@ const Cart: React.FunctionComponent<CartProps> = () => {
 
     let cartProducts = useSelector((state: Products) => state.cart)
     let getLoading = useSelector((state: loading) => state.loading)
-    const [getFirestoreProducts, setGetFirestoreProducts]:any = useState([])
 
     const fetchCartSliceData = async () => {
 		onAuthStateChanged(auth, async(user) => {
@@ -70,15 +69,9 @@ const Cart: React.FunctionComponent<CartProps> = () => {
 		});
     }
 
-    useEffect(() => {
-        console.log(getFirestoreProducts[0])
-        //dispatch(UPDATE_CART((getFirestoreProducts[0].cartProducts)))
-    }, [getFirestoreProducts])
-
     const fetchInitialCartData = () => {
         onAuthStateChanged(auth, async(user) => {
 			if (user) {
-                 console.log(user)
 				// User is signed in, see docs for a list of available properties
 				// https://firebase.google.com/docs/reference/js/firebase.User
 				const uid = user.uid ;
@@ -157,7 +150,7 @@ const Cart: React.FunctionComponent<CartProps> = () => {
             {cartProducts.orders.map((products) => {
                 return(
                     <div key={products.id} className='border-t-2'>
-                        <div className="md:flex md:h-32 md:justify-between mx-10 md:mx-20 shadow-2xl px-10 py-5 mt-10 mb-5 border-2 md:items-center">
+                        <div className="md:flex md:h-32 md:justify-between mx-10 md:mx-20 shadow-2xl px-10 py-5 my-10 border-2 md:items-center">
                             <div className="md:mb-0 mb-5 md:w-1/6">
                                 <p className="text-xl font-bold">{products.foodName}</p>
                             </div>
