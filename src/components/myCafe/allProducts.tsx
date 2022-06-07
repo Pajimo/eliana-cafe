@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_TO_CART,  } from "../slice/cartSlice";
 import { doc, setDoc } from "firebase/firestore"; 
 import { database } from "../../configuration/firebaseConfig";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Product from "./product";
-import { AiOutlineShopping } from "react-icons/ai";
 import Header from "./header";
 import { ViewProduct } from "../slice/viewProduct";
 import { getProducts } from "../contentful/contentfulApi";
@@ -111,11 +109,9 @@ const AllProducts: React.FunctionComponent<AllProductsProps> = () => {
 
 	useEffect(() => {
 		setCategory(cafeProducts)
-	}, [cafeProducts])
-
-	useEffect(() => {
 		dispatch(IsLoading(false))
 	}, [cafeProducts])
+
 
 	const shuffleCafe = (cate: string) => {
 		if(cafeProducts) {

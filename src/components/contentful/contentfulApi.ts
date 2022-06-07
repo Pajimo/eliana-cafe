@@ -1,8 +1,8 @@
 var contentful = require('contentful');
 
 var client = contentful.createClient({
-    space: 'xxxxxxxxxxxxxxx',
-    accessToken: 'xxxxxxxxxxxxxxx',
+    space: '*****************',
+    accessToken: '*****************',
 });
 
 type Response = {

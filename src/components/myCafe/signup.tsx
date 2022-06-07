@@ -4,10 +4,10 @@ import { getAuth,
     createUserWithEmailAndPassword, 
     sendEmailVerification,
     updateProfile,
-    sendPasswordResetEmail } from "firebase/auth";
+} from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
-import { setDoc, doc, collection, getDocs, query, where } from "firebase/firestore";
+import { setDoc, doc, collection, getDocs} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import {ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -71,7 +71,6 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 				await updateProfile(user, {
 					displayName: userProfile.fullName
 				})
-
 				const q = collection(database, user.uid);
 				const docs = await getDocs(q);
 				if (docs.docs.length === 0) {
@@ -84,7 +83,10 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 				}
 				sendEmailVerification(user)
 				// ...
-				dispatch(IsLoading(false))
+				toast('Signed In Successsfully');
+				setTimeout(() => {
+				  navigate('/homepage/all-products') 
+				}, 1000)
 			}
 			catch(error: any){
 				const errorCode = error.code;
@@ -97,6 +99,31 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 			};
         }
     }
+
+	const googleProvider = new GoogleAuthProvider();
+    const signInWithGoogle = async () => {
+        try {
+			dispatch(IsLoading(true))
+            const res = await signInWithPopup(auth, googleProvider);
+            const user = res.user;
+			const q = collection(database, user.uid);
+			const docs = await getDocs(q);
+            if (docs.docs.length === 0) {
+                await setDoc(doc(database, user.uid, "User-Info"), {
+                    uid: user.uid,
+                    name: user.displayName,
+                    authProvider: "google",
+                    email: user.email,
+				})
+            } 
+			toast('Signed In Successsfully');
+			setTimeout(() => {
+			  navigate('/homepage/all-products') 
+			}, 1000)
+        } catch (err: any) {
+            toast.error(err.message);
+        }
+    };
 
 	const handleInputChange = (e: any) => {
 		const { name, value } = e.target;
@@ -132,7 +159,7 @@ const SignUp: React.FunctionComponent<SignUpProps> = () => {
 							flex items-center justify-center' 
 							onClick = {(e) =>{
 								e.preventDefault();
-								//signInWithGoogle()
+								signInWithGoogle()
 							}}> <FcGoogle className="mr-3 bg-white"/> Continue with Google</button>
 						<div className='flex w-full'>
 							<p className='border-b-2 basis-5/12 mb-2'></p>

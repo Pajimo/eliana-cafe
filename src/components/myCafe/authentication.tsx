@@ -4,14 +4,7 @@ import SignUp from "./signup";
 import ForgotPassword from "./forgotPassword";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
-import { getAuth,
-    GoogleAuthProvider, 
-    signInWithPopup,
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    sendEmailVerification,
-    updateProfile,
-    sendPasswordResetEmail } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 
 interface AuthenticationProps {

@@ -3,8 +3,8 @@ import { getAuth,
     GoogleAuthProvider, 
     signInWithPopup,
     signInWithEmailAndPassword, 
-    updateProfile,
-    sendPasswordResetEmail, onAuthStateChanged} from "firebase/auth";
+ 	onAuthStateChanged
+} from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuthType } from "../slice/authSlice";
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,9 +13,9 @@ import { FcGoogle } from "react-icons/fc";
 import {useNavigate} from 'react-router-dom'
 import {IsLoading} from '../slice/isLoadingSlice'
 import LoadingState from './loadingState'
-import { UPDATE_CART } from "../slice/cartSlice";
-import { setDoc, doc } from "firebase/firestore";
-import { database } from '../../configuration/firebaseConfig'
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+import { database } from '../../configuration/firebaseConfig';
+
 
 interface LoginProps {
     
@@ -89,6 +89,31 @@ const Login: React.FunctionComponent<LoginProps> = () => {
           });
         }
       }
+
+	const googleProvider = new GoogleAuthProvider();
+	const signInWithGoogle = async () => {
+		try {
+			dispatch(IsLoading(true))
+			const res = await signInWithPopup(auth, googleProvider);
+			const user = res.user;
+			const q = collection(database, user.uid);
+			const docs = await getDocs(q);
+			if (docs.docs.length === 0) {
+				await setDoc(doc(database, user.uid, "User-Info"), {
+                    uid: user.uid,
+                    name: user.displayName,
+                    authProvider: "google",
+                    email: user.email,
+				})
+			} 
+			toast('Signed In Successsfully');
+			setTimeout(() => {
+			navigate('/homepage/all-products') 
+			}, 1000)
+		} catch (err: any) {
+			toast.error(err.message);
+		}
+	};
       
 
       const resetPassword = async() => {
@@ -121,7 +146,7 @@ const Login: React.FunctionComponent<LoginProps> = () => {
 							items-center justify-center' 
 							onClick = {(e) =>{
 								e.preventDefault();
-								//signInWithGoogle()
+								signInWithGoogle()
 							}}> <FcGoogle className="mr-3 bg-white"/> Continue with Google</button>
 						<div className='flex w-full'>
 							<p className='border-b-2 basis-5/12 mb-2'></p>
