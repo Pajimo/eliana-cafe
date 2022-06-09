@@ -61,8 +61,8 @@ const Product: React.FunctionComponent<ProductProps> = () => {
         const quant = Number(quantity)
         const newOrder = {
             ...order,
-            quantity: quant | singleProduct.quantity,
-            total_price: (quant * singleProduct.price) | singleProduct.price
+            quantity: quant || singleProduct.quantity,
+            total_price: quant * singleProduct.price || singleProduct.price
         }
 		dispatch(ADD_TO_CART(newOrder))
         dispatch(IsLoading(false))
